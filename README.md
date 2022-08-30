@@ -32,8 +32,8 @@ This repository is part of the data structure and algorithms (#EDA) teaching fra
 
 The students edit this section to add their names, Uniandes emails, and specify which project functionality of the project they will implement.
 
-1. Req. 3 - Daniel Roa Uribe Name, d.roau@uniandes.edu.co, 202215803, Student No. 1 owned functionality.
-1. Req. 5 - Jose Guevara Pedroza, jd.guevarap1@uniandes.edu.co , 202213763, Student No. 2 owned functionality.
+1. Req. 3 - Daniel Roa Uribe Name, d.roau@uniandes.edu.co, 202215803.
+1. Req. 5 - Jose Guevara Pedroza, jd.guevarap1@uniandes.edu.co , 202213763.
 1. Req. 4 - Jesus Correcha Guarnizo, j.correcha@uniandes.edu.co, 202215016.
 
 [Back to top](#challenge-template)
