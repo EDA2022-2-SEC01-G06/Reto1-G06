@@ -54,7 +54,7 @@ def NewCatalog():
             }
 
     # para el taller 3 solo se va a implementar la lista de videos
-    catalog["videos"]=lt.newList(datastructure= "ARRAY_LIST")
+    catalog["videos"]=lt.newList(datastructure= "ARRAY_LIST", cmpfunction= compare_videos)
     catalog["stream_services"]=lt.newList("ARRAY_LIST", cmpfunction=compare_streaming_services)
 
     return catalog
@@ -105,6 +105,13 @@ def newStreaming_service(name:str):
 def Getlistsize(catalog, list_name:str):
     return lt.size(catalog[list_name])
 
+def already_exist(lista, elemento):
+    presente=lt.isPresent(lista, elemento)
+    if presente >0:
+        return True
+    else:
+        return False
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compare_streaming_services(streaming_s1, st_service):
@@ -114,10 +121,16 @@ def compare_streaming_services(streaming_s1, st_service):
         return 1
     return -1
 
+def compare_videos(v1,video):
+    if v1['show_id'].lower() == video['show_id'].lower():
+        return 0
+    elif v1['show_id'].lower() > video['show_id'].lower():
+        return 1
+    return -1
 # Funciones de ordenamiento
 
 def compare_by_year(video1, video2):
-    return (float(video1["release_year"])>float(video2["release_year"]))
+    return ((float(video1["release_year"])>float(video2["release_year"])) and ((video1["title"].lower()) > (video2["title"].lower())))
 
 def sortVideos(catalog):
     sa.sort(catalog["videos"], cmpfunction= compare_by_year)

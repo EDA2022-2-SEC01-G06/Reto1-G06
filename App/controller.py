@@ -77,7 +77,11 @@ def loadMovies(catalog):
 
 def addMoviefromCSV_Input(catalog, input_file, stream_service:str):
     for video in input_file:
-        video["stream_service"]= stream_service
+        ya_esta= model.already_exist(catalog["videos"], video)
+        if ya_esta == True:
+            video["show_id"]=video["show_id"]+"-"+stream_service
+        else:
+            video["stream_service"]= stream_service
         model.addMovie(catalog, video)
 # Funciones de ordenamiento
 

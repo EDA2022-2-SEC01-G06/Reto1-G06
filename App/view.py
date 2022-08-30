@@ -38,8 +38,6 @@ operación solicitada
 default_limit = 1000 
 sys.setrecursionlimit(default_limit*10)
 
-tabulate.PRESERVE_WHITESPACE=False
-
 def newController():
     control=controller.newController()
     return control
@@ -66,20 +64,22 @@ def loadData(control):
     cantidad_videos, stream_s_count =controller.GetDataSpecifications(control["model"])
     print("Total de datos cargados:",cantidad_videos)
 
+    specificaciones_list=[]
     for stream_s in stream_s_count["elements"]:
-        print(stream_s["name"] ,":", stream_s["size"])
+        specificaciones_list.append([stream_s["name"] , stream_s["size"]])
+    print(tabulate.tabulate(specificaciones_list, headers=("servicio de streaming", "total") ,floatfmt="fancy_grid"))
+    print("\n---------------------------------")
 
     #primeros y ultimos 3   
     primeros3=data["elements"][0:3]
     ultimos3=data["elements"][-1:-4:-1]
     show_data=primeros3+ultimos3
-    table_headers=show_data[0].keys()
-    table_data=[]
-    for reg in show_data:
-        table_data.append(list(reg.values()))
     
     #mostrar tabla
-    print(tabulate.tabulate(table_data, headers=table_headers, tablefmt= "grid"))
+
+    print(tabulate.tabulate(show_data, headers="keys"))
+    print("La libreria tabulate mostrara la tabla 1de manera incorrecta dependiendo del tamaño de la terminal")
+
     #return data
 control=newController()
 catalog = None
