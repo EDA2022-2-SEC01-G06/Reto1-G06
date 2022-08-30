@@ -23,6 +23,7 @@
 import config as cf
 import sys
 import controller
+import tabulate
 from DISClib.ADT import list as lt
 assert cf
 
@@ -33,13 +34,56 @@ Presenta el menu de opciones y por cada seleccion
 se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
+#actualizar limites de recursion
+default_limit = 1000 
+sys.setrecursionlimit(default_limit*10)
+
+tabulate.PRESERVE_WHITESPACE=False
+
+def newController():
+    control=controller.newController()
+    return control
 
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+   # print("2- ")
+    print("0- salir")
 
+def loadData(control):
+    """
+    Esta función solicita al controlador que cargue los datos en el modelo
+    ------------------------
+    Parametros:
+        controller: el controlador que se va a asociar al view
+    ------------------------
+    Retorno:
+        los datos de los videos
+    """
+    print("Información de los datos cargados:")
+    
+    data = controller.loadData(control)
+    cantidad_videos, stream_s_count =controller.GetDataSpecifications(control["model"])
+    print("Total de datos cargados:",cantidad_videos)
+
+    for stream_s in stream_s_count["elements"]:
+        print(stream_s["name"] ,":", stream_s["size"])
+
+    #primeros y ultimos 3   
+    primeros3=data["elements"][0:3]
+    ultimos3=data["elements"][-1:-4:-1]
+    show_data=primeros3+ultimos3
+    table_headers=show_data[0].keys()
+    table_data=[]
+    for reg in show_data:
+        table_data.append(list(reg.values()))
+    
+    #mostrar tabla
+    print(tabulate.tabulate(table_data, headers=table_headers, tablefmt= "grid"))
+    #return data
+control=newController()
 catalog = None
+
 
 """
 Menu principal
@@ -49,9 +93,10 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        loadData(control)
 
-    elif int(inputs[0]) == 2:
-        pass
+    #elif int(inputs[0]) == 2:
+     #   pass
 
     else:
         sys.exit(0)
