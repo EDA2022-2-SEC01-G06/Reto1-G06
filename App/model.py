@@ -31,6 +31,7 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import selectionsort as selection
+import time
 assert cf
 
 """
@@ -176,3 +177,19 @@ def sortVideos(catalog, sort_algoritm:str):
         insertion.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "selection":
         selection.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+
+#funciones para medir tiempo de ejecucion
+
+def getTime():
+    """
+    devuelve el instante tiempo de procesamiento en milisegundos
+    """
+    return float(time.perf_counter()*1000)
+
+
+def deltaTime(start, end):
+    """
+    devuelve la diferencia entre tiempos de procesamiento muestreados
+    """
+    elapsed = float(end - start)
+    return elapsed

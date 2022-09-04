@@ -199,17 +199,26 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs) == 1:
         print("Cargando información de los archivos ....")
+        start_time=controller.Get_time()
         control=newController()
         loadData(control, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
 
     #elif int(inputs[0]) == 2:
      #   pass
-    elif int(inputs) == 9:
-       Change_sort_algoritm()
+    elif int(inputs) == 9:   
+        Change_sort_algoritm()
     elif int(inputs) == 10:
-       ChangeTAD_type("videos")
+        start_time=controller.Get_time()
+        ChangeTAD_type("videos")
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
     elif int(inputs) == 11:
-       Change_Data_size()
+        start_time=controller.Get_time()
+        Change_Data_size()
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
     else:
         sys.exit(0)
 sys.exit(0)

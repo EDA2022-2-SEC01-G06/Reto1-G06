@@ -106,3 +106,11 @@ def GetDataSpecifications(catalog):
 
 def Get_Sample_Data(catalog, sample_size:int):
     return model.Get_sample_data(catalog, sample_size, "videos")
+
+#funciones de medicion de tiempo
+
+def Get_time():
+    return model.getTime()
+
+def Delta_time(start, end):
+    return model.deltaTime(start, end)
