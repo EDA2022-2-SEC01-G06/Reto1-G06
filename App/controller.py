@@ -33,36 +33,42 @@ csv.field_size_limit(2147483647)
 
 # Inicialización del Catálogo de libros
 
-def newController():
+def newController(characteristics:dict):
     """
     Se crea una instancia del modelo
+    -------------------------------------
+    Recibe por parametro un diccionario que determina el tipo de TAD para cada lista dentro
+     del catalogo
     """
     control={
         "model":None
     }
-    control["model"]=model.NewCatalog()
+    control["model"]=model.NewCatalog(characteristics)
     return control
 
 # Funciones para la carga de datos
 
-def loadData(control):
+def loadData(control, characteristics:dict):
     """
     Cargar los datos de las peliculas y las listas del catalog
+    -----------------------------
+    recibe por parametro un diccionario con las caracteristicas del catalogo
     """
     catalog=control["model"]
-    data = loadMovies(catalog)
-    model.sortVideos(catalog)
+    data = loadMovies(catalog, characteristics)
+    model.sortVideos(catalog, characteristics["sort_algoritm"])
     return catalog["videos"]
 
-def loadMovies(catalog):
+def loadMovies(catalog, characteristics:dict):
     """
     Cargar los datos de las peliculas del archivo csv.
     """
+    sufijo= characteristics["data_size_sufijo"]
     #para la prueba se usan con el sufijo -small
-    Amazon_data= cf.data_dir + "Streaming/amazon_prime_titles-utf8-small.csv"
-    Disney_data= cf.data_dir + "Streaming/disney_plus_titles-utf8-small.csv"
-    Hulu_data= cf.data_dir + "Streaming/hulu_titles-utf8-small.csv"
-    Netflix_data= cf.data_dir + "Streaming/netflix_titles-utf8-small.csv"
+    Amazon_data= cf.data_dir + "Streaming/amazon_prime_titles-utf8"+sufijo+".csv"
+    Disney_data= cf.data_dir + "Streaming/disney_plus_titles-utf8"+sufijo+".csv"
+    Hulu_data= cf.data_dir + "Streaming/hulu_titles-utf8"+sufijo+".csv"
+    Netflix_data= cf.data_dir + "Streaming/netflix_titles-utf8"+sufijo+".csv"
 
     input_file_Amazon= csv.DictReader(open(Amazon_data, encoding= "utf-8"))
     input_file_Disney= csv.DictReader(open(Disney_data, encoding= "utf-8"))
@@ -80,6 +86,7 @@ def addMoviefromCSV_Input(catalog, input_file, stream_service:str):
         ya_esta= model.already_exist(catalog["videos"], video)
         if ya_esta == True:
             video["show_id"]=video["show_id"]+"-"+stream_service
+            video["stream_service"]= stream_service
         else:
             video["stream_service"]= stream_service
         model.addMovie(catalog, video)
@@ -96,3 +103,6 @@ def GetDataSpecifications(catalog):
     stream_service_count=catalog["stream_services"]
 
     return cantidad_videos, stream_service_count
+
+def Get_Sample_Data(catalog, sample_size:int):
+    return model.Get_sample_data(catalog, sample_size, "videos")

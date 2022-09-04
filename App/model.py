@@ -29,6 +29,8 @@ from gettext import Catalog
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import insertionsort as insertion
+from DISClib.Algorithms.Sorting import selectionsort as selection
 assert cf
 
 """
@@ -38,14 +40,17 @@ los mismos.
 
 # Construccion de modelos
 
-def NewCatalog():
+def NewCatalog(TADs:dict):
     """
     Crea el catalogo de peliculas. tiene 5 listas, una para los videos
     otra para las categorias, para los actores, directores y paises.
+    ---------------------
+    Recibe como parametro un diccionario con los tipos de TAD para cada lista dentro del catalogo
+    el diccionario se encuentra en el view.py
     """
     catalog ={
          "videos":None,
-         "stream_services":None
+         "stream_services": None
          #"categorias":None,
          #"actores":None,
          #"directores":None,
@@ -54,8 +59,8 @@ def NewCatalog():
             }
 
     # para el taller 3 solo se va a implementar la lista de videos
-    catalog["videos"]=lt.newList(datastructure= "ARRAY_LIST", cmpfunction= compare_videos)
-    catalog["stream_services"]=lt.newList("ARRAY_LIST", cmpfunction=compare_streaming_services)
+    catalog["videos"]=lt.newList(datastructure= TADs["videos"], cmpfunction= compare_videos)
+    catalog["stream_services"]=lt.newList(TADs["stream_services"], cmpfunction=compare_streaming_services)
 
     return catalog
 
@@ -112,6 +117,17 @@ def already_exist(lista, elemento):
     else:
         return False
 
+def Get_sample_data(catalog, sample_size:int, list_name:str):
+    first_samples=[]
+    last_samples=[]
+    lista=catalog[list_name]
+    list_size=Getlistsize(catalog, list_name)
+    for i in range(1, sample_size+1):
+        first_samples.append(lt.getElement(lista, i))
+    for e in range(list_size, list_size-sample_size, -1):
+        last_samples.append(lt.getElement(lista, e))
+    return first_samples+last_samples
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def compare_streaming_services(streaming_s1, st_service):
@@ -132,5 +148,31 @@ def compare_videos(v1,video):
 def compare_by_year(video1, video2):
     return ((float(video1["release_year"])>float(video2["release_year"])) and ((video1["title"].lower()) > (video2["title"].lower())))
 
-def sortVideos(catalog):
-    sa.sort(catalog["videos"], cmpfunction= compare_by_year)
+def cmpMoviesByReleaseYear(movie1, movie2): 
+    """ Devuelve verdadero (True) si el release_year de movie1 son menores que los de movie2,
+     en caso de que sean iguales tenga en cuenta el titulo y en caso de que ambos criterios
+      sean iguales tenga en cuenta la duración, de lo contrario devuelva falso (False). 
+      Args: movie1: informacion de la primera pelicula que incluye sus valores 'release_year',
+       ‘title’ y ‘duration’ movie2: informacion de la segunda pelicula que incluye su valor
+        'release_year', ‘title’ y ‘duration’ """
+    if float(movie1["release_year"])<float(movie2["release_year"]):
+        return True
+    elif float(movie1["release_year"])==float(movie2["release_year"]):
+        if movie1["title"].lower() < movie2['title'].lower():
+            return True
+        elif movie1["title"].lower() == movie2['title'].lower():
+            if movie1["duration"] != "" and movie2["duration"] != "":
+                if float(movie1["duration"].split(" ")[0])<float(movie2["duration"].split(" ")[0]):
+                    return True
+    
+    return False
+
+
+
+def sortVideos(catalog, sort_algoritm:str):
+    if sort_algoritm == "shell":
+        sa.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+    elif sort_algoritm == "insertion":
+        insertion.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+    elif sort_algoritm == "selection":
+        selection.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
