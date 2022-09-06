@@ -187,6 +187,12 @@ def Change_sort_algoritm():
     elif int(user_inputs[0]) == 3:
         controller_characteristics["sort_algoritm"]="insertion"
 
+def show_configuration():
+    print("-------------------------------------------")
+    print(f"TAD actual: {controller_characteristics['videos']}")
+    print(f"sufijo del archivo csv: {controller_characteristics['data_size_sufijo']}")
+    print(f"algoritmo sort actual: {controller_characteristics['sort_algoritm']}")
+    print("--------------------------------------------")
 control=newController()
 #catalog = None
 
@@ -204,21 +210,25 @@ while True:
         loadData(control, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
 
     #elif int(inputs[0]) == 2:
      #   pass
     elif int(inputs) == 9:   
         Change_sort_algoritm()
+        show_configuration()
     elif int(inputs) == 10:
         start_time=controller.Get_time()
         ChangeTAD_type("videos")
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
     elif int(inputs) == 11:
         start_time=controller.Get_time()
         Change_Data_size()
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
     else:
         sys.exit(0)
 sys.exit(0)
