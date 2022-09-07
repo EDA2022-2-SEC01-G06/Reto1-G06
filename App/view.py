@@ -227,7 +227,7 @@ while True:
         start_time=controller.Get_time()
         Change_Data_size()
         end_time=controller.Get_time()
-        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        print(f"Tiempo de ejecución:{controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
     else:
         sys.exit(0)
