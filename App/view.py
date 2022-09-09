@@ -79,7 +79,7 @@ def loadData(control, controller_characteristics:dict):
     specificaciones_list=[]
     for stream_s in stream_s_count["elements"]:
         specificaciones_list.append([stream_s["name"] , stream_s["size"]])
-    print(tabulate.tabulate(specificaciones_list, headers=("servicio de streaming", "total") ,floatfmt="fancy_grid"))
+    print(tabulate.tabulate(specificaciones_list, headers=("servicio de streaming", "total") ,tablefmt="grid"))
     print("\n---------------------------------")
 
     #primeros y ultimos 3   
@@ -87,8 +87,8 @@ def loadData(control, controller_characteristics:dict):
     
     #mostrar tabla
 
-    print(tabulate.tabulate(show_data, headers="keys"))
-    print("La libreria tabulate mostrara la tabla de manera incorrecta dependiendo del tamaño de la terminal")
+    print(tabulate.tabulate(show_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+    
 
 def ChangeTAD_type(list_name:str):
     """
