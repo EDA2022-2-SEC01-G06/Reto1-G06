@@ -89,6 +89,7 @@ def loadData(control, controller_characteristics:dict):
     #mostrar tabla
 
     print(tabulate.tabulate(show_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+    print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
     
 
 def ChangeTAD_type(list_name:str):
