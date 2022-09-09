@@ -42,6 +42,7 @@ controller_characteristics={
     #Este diccionario se usa como referencia para elegir el tipo de TAD al crear las listas que
     #componen al catalogo
     #tambien algunas otras caracteristicas que permiten modificar el controlador
+    #estas caracteristicas se usan dentro del model.py para crear las listas, modificar los algoritmos sort, etc.
     "videos":"ARRAY_LIST",
     "stream_services":"ARRAY_LIST",
     "data_size_sufijo":"-small",
