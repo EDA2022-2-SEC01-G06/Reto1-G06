@@ -177,6 +177,8 @@ def Change_sort_algoritm():
     print("1- shell")
     print("2- selection")
     print("3- insertion")
+    print("4- merge")
+    print("5- quick")
 
     user_inputs = input('Seleccione una opción para continuar\n')
 
@@ -186,6 +188,10 @@ def Change_sort_algoritm():
         controller_characteristics["sort_algoritm"]="selection"
     elif int(user_inputs[0]) == 3:
         controller_characteristics["sort_algoritm"]="insertion"
+    elif int(user_inputs[0]) == 4:
+        controller_characteristics["sort_algoritm"]="merge"
+    elif int(user_inputs[0]) == 5:
+        controller_characteristics["sort_algoritm"]="quick"
 
 def show_configuration():
     print("-------------------------------------------")

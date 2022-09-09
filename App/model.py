@@ -31,6 +31,8 @@ from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import selectionsort as selection
+from DISClib.Algorithms.Sorting import mergesort as merge
+from DISClib.Algorithms.Sorting import quicksort as quick
 import time
 assert cf
 
@@ -177,6 +179,10 @@ def sortVideos(catalog, sort_algoritm:str):
         insertion.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "selection":
         selection.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+    elif sort_algoritm == "merge":
+        merge.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+    elif sort_algoritm == "quick":
+        quick.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
 
 #funciones para medir tiempo de ejecucion
 
