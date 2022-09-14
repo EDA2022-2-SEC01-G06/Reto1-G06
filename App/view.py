@@ -34,6 +34,7 @@ Presenta el menu de opciones y por cada seleccion
 se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
+#Este comentario se puso para que el comentario del commit coincidiera con lo pedido en el pdf del laboratorio
 #actualizar limites de recursion
 default_limit = 1000 
 sys.setrecursionlimit(default_limit*10)
