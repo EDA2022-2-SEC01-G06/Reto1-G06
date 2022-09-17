@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from gettext import Catalog
 import config as cf
 import sys
 import controller
@@ -56,6 +57,7 @@ def newController():
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
+    print("2- Listar peliculas estrenadas en un periodo")
     print("9- Cambiar el algoritmo para ordenamiento de los datos")
     print("10- Elegir TAD para el catalogo de peliculas")
     print("11- Elegir tamaño del catalogo de peliculas")
@@ -74,7 +76,7 @@ def loadData(control, controller_characteristics:dict):
     """
     print("Información de los datos cargados:")
     
-    data = controller.loadData(control, controller_characteristics)
+    controller.loadData(control, controller_characteristics)
     cantidad_videos, stream_s_count =controller.GetDataSpecifications(control["model"])
     print("Total de datos cargados:",cantidad_videos)
 
@@ -88,10 +90,17 @@ def loadData(control, controller_characteristics:dict):
     show_data=controller.Get_Sample_Data(control["model"], 3)
     
     #mostrar tabla
-
     print(tabulate.tabulate(show_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
     print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
     
+def Movies_by_year(control, year1,year2, characteristics:dict):
+    sample_data, size_list=controller.Movies_by_year(control["model"], year1, year2,characteristics)
+    #print(sample_data)
+    print("==================Requerimiento 1==============")
+    print(f"Hay un total de {size_list} peliculas estrenadas entre {year1} y {year2}")
+    print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+    print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
+
 
 def ChangeTAD_type(list_name:str):
     """
@@ -220,9 +229,19 @@ while True:
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
+        #acceso a datos del registro
+        #print(((control["model"]["videos"])))
 
+    elif int(inputs[0]) == 2:
+        start_time=controller.Get_time()
+        year1=int(input("Año inicial: "))
+        year2=int(input("Año final: "))
+        Movies_by_year(control, year1, year2, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
     #elif int(inputs[0]) == 2:
-     #   pass
+    #   pass
     elif int(inputs) == 9:   
         Change_sort_algoritm()
         show_configuration()

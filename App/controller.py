@@ -56,7 +56,7 @@ def loadData(control, characteristics:dict):
     """
     catalog=control["model"]
     data = loadMovies(catalog, characteristics)
-    model.sortVideos(catalog, characteristics["sort_algoritm"])
+    model.sortVideos(catalog, characteristics["sort_algoritm"], "videos")
     return catalog["videos"]
 
 def loadMovies(catalog, characteristics:dict):
@@ -106,6 +106,11 @@ def GetDataSpecifications(catalog):
 
 def Get_Sample_Data(catalog, sample_size:int):
     return model.Get_sample_data(catalog, sample_size, "videos")
+
+def Movies_by_year(catalog, year1:int, year2:int, characteristics:dict):
+    model.Search_movie_by_year(catalog,year1,year2)
+    model.sortVideos(catalog, characteristics["sort_algoritm"], "movies_by_year")
+    return model.Get_sample_data(catalog, sample_size= 3,list_name="movies_by_year"), model.Getlistsize(catalog, "movies_by_year")
 
 #funciones de medicion de tiempo
 

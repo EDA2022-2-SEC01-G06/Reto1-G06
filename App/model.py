@@ -53,7 +53,8 @@ def NewCatalog(TADs:dict):
     """
     catalog ={
          "videos":None,
-         "stream_services": None
+         "stream_services": None,
+         "movies_by_year":None
          #"categorias":None,
          #"actores":None,
          #"directores":None,
@@ -69,6 +70,9 @@ def NewCatalog(TADs:dict):
 
 # Funciones para agregar informacion al catalogo
 
+def New_list_to_catalog(catalog, List_name:str, TAD:str):
+    "añade o reescribe una nueva lista al catalogo// evita tener que recargar todo el catalogo de peliculas"
+    catalog[List_name]=lt.newList(datastructure=TAD, cmpfunction=compare_videos)
 
    
 # Funciones para creacion de datos
@@ -94,7 +98,9 @@ def addStreaming_service(catalog, streaming_service_name, video):
     else:
         st_service = newStreaming_service(streaming_service_name)
         lt.addLast(servicios_streaming, st_service)
-    lt.addLast(st_service["videos"], video)
+    #esta linea agrega el video al streaming service determinado, no obstante ya que ningun requerimiento lo pide
+    #esta solo comentado
+    #lt.addLast(st_service["videos"], video)
     st_service["size"]+=1
     return catalog
 
@@ -129,7 +135,28 @@ def Get_sample_data(catalog, sample_size:int, list_name:str):
         first_samples.append(lt.getElement(lista, i))
     for e in range(list_size, list_size-sample_size, -1):
         last_samples.append(lt.getElement(lista, e))
-    return first_samples+last_samples
+    return first_samples+ list(reversed(last_samples))
+
+def Search_movie_by_year(catalog, year1:int, year2:int):
+    New_list_to_catalog(catalog, "movies_by_year", "ARRAY_LIST")
+    #recorrer la lista de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+        #verificar si cumple los requisitos
+        if (video["type"]=="Movie")and((int(video["release_year"])>=year1)and(int(video["release_year"])<=year2)):
+            #contruir el registro que se va a agregar
+            video2={
+                "type":video["type"],
+                "release_year":video["release_year"],
+                "title":video["title"],
+                "duration":video["duration"],
+                "stream_service": video["stream_service"],
+                "director": video["director"],
+                "cast":video["cast"]
+              }
+            lt.addLast(catalog["movies_by_year"], video2)
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -172,17 +199,17 @@ def cmpMoviesByReleaseYear(movie1, movie2):
 
 
 
-def sortVideos(catalog, sort_algoritm:str):
+def sortVideos(catalog, sort_algoritm:str, list_name):
     if sort_algoritm == "shell":
-        sa.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+        sa.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "insertion":
-        insertion.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+        insertion.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "selection":
-        selection.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+        selection.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "merge":
-        merge.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+        merge.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
     elif sort_algoritm == "quick":
-        quick.sort(catalog["videos"], cmpfunction= cmpMoviesByReleaseYear)
+        quick.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
 
 #funciones para medir tiempo de ejecucion
 
