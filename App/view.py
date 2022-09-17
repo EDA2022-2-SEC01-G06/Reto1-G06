@@ -98,8 +98,9 @@ def Movies_by_year(control, year1,year2, characteristics:dict):
     #print(sample_data)
     print("==================Requerimiento 1==============")
     print(f"Hay un total de {size_list} peliculas estrenadas entre {year1} y {year2}")
-    print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
-    print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
+    if size_list>0:
+        print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
 
 
 def ChangeTAD_type(list_name:str):
