@@ -254,7 +254,7 @@ while True:
     
     elif int(inputs[0]) == 3:
         start_time=controller.Get_time()
-        print("Introduce 2 fechas en formato %B %d, %Y (ej: January 07, 2018)")
+        print("Introduce 2 fechas en el formato %B %d, %Y (ej: January 07, 2018)")
         date1=input("fecha inicial: ")
         date2=input("fecha final: ")
         Tv_shows_by_date(control, date1, date2, controller_characteristics)
