@@ -56,7 +56,7 @@ def loadData(control, characteristics:dict):
     """
     catalog=control["model"]
     data = loadMovies(catalog, characteristics)
-    model.sortVideos(catalog, characteristics["sort_algoritm"], "videos")
+    model.sortlist(catalog, characteristics["sort_algoritm"], "videos", model.cmpMoviesByReleaseYear)
     return catalog["videos"]
 
 def loadMovies(catalog, characteristics:dict):
@@ -114,7 +114,7 @@ def Movies_by_year(catalog, year1:int, year2:int, characteristics:dict):
     model.Search_movie_by_year(catalog,year1,year2)
     list_size=model.Getlistsize(catalog, "movies_by_year")
     if list_size > 0:
-        model.sortVideos(catalog, characteristics["sort_algoritm"], "movies_by_year")
+        model.sortlist(catalog, characteristics["sort_algoritm"], "movies_by_year", model.cmpMoviesByReleaseYear)
         return model.Get_sample_data(catalog, sample_size= 3,list_name="movies_by_year"), list_size
     else:
         return None, list_size
@@ -126,7 +126,7 @@ def TV_show_by_date_added(catalog, date1:str, date2:str, characteristics:dict):
     model.Search_TV_show_by_date(catalog,date1,date2)
     list_size=model.Getlistsize(catalog, "tv_shows_by_date")
     if list_size > 0:
-        model.sortVideos(catalog, characteristics["sort_algoritm"], "tv_shows_by_date")
+        model.sortlist(catalog, characteristics["sort_algoritm"], "tv_shows_by_date", model.cmpMoviesByReleaseYear)
         return model.Get_sample_data(catalog, sample_size= 3,list_name="tv_shows_by_date"), list_size
     else:
         return None, list_size
@@ -138,7 +138,7 @@ def Videos_by_country(catalog, country:str, characteristics:dict):
     streaming_service_count=model.Search_videos_by_Country(catalog, country)
     list_size=model.Getlistsize(catalog, "videos_by_country")
     if list_size > 0:
-        model.sortVideos(catalog, characteristics["sort_algoritm"], "videos_by_country")
+        model.sortlist(catalog, characteristics["sort_algoritm"], "videos_by_country", model.cmpMoviesByReleaseYear)
         return model.Get_sample_data(catalog, sample_size= 3,list_name="videos_by_country"), list_size, streaming_service_count
     else:
         return (None, list_size, None)
@@ -150,10 +150,21 @@ def Videos_by_Director(catalog, director:str, characteristics:dict):
     type_count, streaming_service_count=model.Search_videos_by_Director(catalog, director)
     list_size=model.Getlistsize(catalog, "director")
     if list_size > 0:
-        model.sortVideos(catalog, characteristics["sort_algoritm"], "director")
+        model.sortlist(catalog, characteristics["sort_algoritm"], "director", model.cmpMoviesByReleaseYear)
         return model.Get_sample_data(catalog, sample_size= 3,list_name="director"), list_size,type_count, streaming_service_count
     else:
         return (None, list_size, None, None)
+
+def Gender_ranking(catalog, Ntop:int, characteristics:dict):
+    """
+    Se ejecuta la funcion get gender count and specs en el modelo
+    """
+    model.Get_Genres_count_and_specs(catalog)
+    model.sortlist(catalog, characteristics["sort_algoritm"], "genres_ranking", model.cmpRanking)
+    top=model.Get_data_range(catalog, Ntop, "genres_ranking")
+    for i in range(0,len(top)):
+        top[i]["rank"]=i+1
+    return top
 
 #funciones de medicion de tiempo
 

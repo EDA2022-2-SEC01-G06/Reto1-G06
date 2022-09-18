@@ -58,7 +58,8 @@ def NewCatalog(TADs:dict):
          "movies_by_year":None,
          "tv_shows_by_date":None,
          "videos_by_country":None,
-         "director":None
+         "director":None,
+         "genres_ranking":None
          #"actores":None,
          
             }
@@ -71,9 +72,9 @@ def NewCatalog(TADs:dict):
 
 # Funciones para agregar informacion al catalogo
 
-def New_list_to_catalog(catalog, List_name:str, TAD:str):
+def New_list_to_catalog(catalog, List_name:str, TAD:str, cmpfunction):
     "añade o reescribe una nueva lista al catalogo// evita tener que recargar todo el catalogo de peliculas"
-    catalog[List_name]=lt.newList(datastructure=TAD, cmpfunction=compare_videos)
+    catalog[List_name]=lt.newList(datastructure=TAD, cmpfunction=cmpfunction)
 
    
 # Funciones para creacion de datos
@@ -127,6 +128,18 @@ def already_exist(lista, elemento):
     else:
         return False
 
+def Get_data_range(catalog, sample_size:int, list_name:str):
+    samples=[]
+    lista=catalog[list_name]
+    list_size=Getlistsize(catalog, list_name)
+    if list_size>=sample_size:
+        for i in range(1, sample_size+1):
+            samples.append(lt.getElement(lista, i))
+    else:
+        for i in range(1, list_size+1):
+            samples.append(lt.getElement(lista, i))
+    return samples
+
 def Get_sample_data(catalog, sample_size:int, list_name:str):
     first_samples=[]
     last_samples=[]
@@ -148,7 +161,7 @@ def Search_movie_by_year(catalog, year1:int, year2:int):
     Se filtran los registros dentro del catalogo y se agregan a una lista los que se encuentren
     entre el rango de años
     """
-    New_list_to_catalog(catalog, "movies_by_year", "ARRAY_LIST")
+    New_list_to_catalog(catalog, "movies_by_year", "ARRAY_LIST", compare_videos)
     #recorrer la lista de peliculas
     size_lista_peliculas=lt.size(catalog["videos"])
     for position in range(1,size_lista_peliculas+1):
@@ -173,7 +186,7 @@ def Search_TV_show_by_date(catalog, date1:str, date2:str):
     los tv shows que se agregaron en las fechas especificadas.
     """
     #se crea la lista
-    New_list_to_catalog(catalog, "tv_shows_by_date", "ARRAY_LIST")
+    New_list_to_catalog(catalog, "tv_shows_by_date", "ARRAY_LIST", compare_videos)
     #se transforman los parametros a datetime
     initial_date=datetime.strptime(date1, "%B %d, %Y")
     final_date=datetime.strptime(date2, "%B %d, %Y")
@@ -199,7 +212,7 @@ def Search_TV_show_by_date(catalog, date1:str, date2:str):
                 lt.addLast(catalog["tv_shows_by_date"], show2)
 
 def Search_videos_by_Country(catalog, country:str):
-    New_list_to_catalog(catalog, "videos_by_country", "ARRAY_LIST")
+    New_list_to_catalog(catalog, "videos_by_country", "ARRAY_LIST", compare_videos)
     #recorrer la lista de peliculas
     size_lista_peliculas=lt.size(catalog["videos"])
     videos_by_streaming_service={}
@@ -226,7 +239,7 @@ def Search_videos_by_Country(catalog, country:str):
     return {"type":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
 
 def Search_videos_by_Director(catalog, director:str):
-    New_list_to_catalog(catalog, "director", "ARRAY_LIST")
+    New_list_to_catalog(catalog, "director", "ARRAY_LIST", compare_videos)
     #recorrer la lista de peliculas
     size_lista_peliculas=lt.size(catalog["videos"])
     videos_by_streaming_service={}
@@ -261,7 +274,73 @@ def Search_videos_by_Director(catalog, director:str):
     #se retorna el diccionario con el conteo por streaming service
     return {"type":videos_by_type.keys(), "count":videos_by_type.values()}, {"stream_service":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
 
+def Get_Genres_count_and_specs(catalog):
+    """
+    Se recorre todo el catalogo de peliculas y se obtiene los datos de cada genero registrado
+    (en cuantas peliculas esta listado el genero, el tipo de contenido: Movie/Tv show, el numero de veces que
+    aparece en un streaming service)
+    """
+    #crear lista dentro del catalogo
+    New_list_to_catalog(catalog, "genres_ranking", "ARRAY_LIST", cmpfunction=compare_ranking_pos)
 
+    #lista de registros por genero, cada registro es un diccionario
+    #{listed_in:str, count:int, type:str(dict{movie:int, tv_show:int}), stream_service:str(dict{stream:count...})}
+    registros_list=[]
+    #diccionario de claves valores, se usa para acceder y modificar algun registro en la lista de registros
+    #sin tener que recorrerla toda cada vez
+    claves_valores={}
+    #recorrer el catalogo de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+
+        #obtener generos listados
+        genres=video["listed_in"].split(",")
+        n_genders=len(genres)
+        for i in range(0, n_genders):
+            genres[i] = genres[i].strip()
+        
+        #añadir generos al la lista de registros
+        for gender in genres:
+            #se verifica que este genero se encuentre ya en la lista
+            #para ello se busca en el diccionario de claves_valores
+            indice=claves_valores.get(gender, -1)
+            if indice == -1:
+                #si no se encuentra
+                type_dict={}
+                type_dict[video["type"]]=1
+                stream_dict={}
+                stream_dict[video["stream_service"]]=1
+                new_gender={"listed_in":gender, "count":1, "type":type_dict, "stream_service":stream_dict}
+                
+                #añdir clave_valor para este genero en la lista
+                claves_valores[gender]=len(registros_list)
+                #añadir genero a la lista
+                registros_list.append(new_gender)
+            else:
+                #si se encuentra
+                # cambiar conteo
+                registros_list[indice]["count"]+=1
+                #cambiar count de type
+                type_count=registros_list[indice]["type"].get(video["type"], 0)
+                registros_list[indice]["type"][video["type"]]=type_count+1
+                #cambiar count de stream service
+                stream_count=registros_list[indice]["stream_service"].get(video["stream_service"], 0)
+                registros_list[indice]["stream_service"][video["stream_service"]]=stream_count+1
+    
+    #añadir cada elemento de la lista de registros a la lista genres_ranking
+    for rankin_element in registros_list:
+        rankin_element["type"]=Dict_to_str(rankin_element["type"])
+        rankin_element["stream_service"]=Dict_to_str(rankin_element["stream_service"])
+        lt.addLast(catalog["genres_ranking"], rankin_element)
+
+def Dict_to_str(dictionary:dict):
+    llaves=list(dictionary.keys())
+    valores=list(dictionary.values())
+    resultado=""
+    for i in range(0,len(llaves)):
+        resultado+=llaves[i]+"      "+str(valores[i])+"\n"
+    return resultado
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
@@ -272,6 +351,12 @@ def compare_streaming_services(streaming_s1, st_service):
         return 1
     return -1
 
+def compare_ranking_pos(rankig_1, ranking):
+    if rankig_1["count"] == ranking["count"]:
+        return 0
+    elif rankig_1["count"] > ranking["count"]:
+        return 1
+    return -1
 def compare_videos(v1,video):
     if v1['show_id'].lower() == video['show_id'].lower():
         return 0
@@ -302,19 +387,28 @@ def cmpMoviesByReleaseYear(movie1, movie2):
     
     return False
 
+def cmpRanking(gender1, gender2):
+    """
+    Esta funcion se usa para organizar el top de rankings
+    """
+    if gender1["count"] > gender2["count"]:
+        return True
+    else:
+        if gender1["listed_in"] < gender2["listed_in"]:
+            return True
+    return False
 
-
-def sortVideos(catalog, sort_algoritm:str, list_name):
+def sortlist(catalog, sort_algoritm:str, list_name, cmpfunction):
     if sort_algoritm == "shell":
-        sa.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
+        sa.sort(catalog[list_name], cmpfunction= cmpfunction)
     elif sort_algoritm == "insertion":
-        insertion.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
+        insertion.sort(catalog[list_name], cmpfunction= cmpfunction)
     elif sort_algoritm == "selection":
-        selection.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
+        selection.sort(catalog[list_name], cmpfunction= cmpfunction)
     elif sort_algoritm == "merge":
-        merge.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
+        merge.sort(catalog[list_name], cmpfunction= cmpfunction)
     elif sort_algoritm == "quick":
-        quick.sort(catalog[list_name], cmpfunction= cmpMoviesByReleaseYear)
+        quick.sort(catalog[list_name], cmpfunction= cmpfunction)
 
 #funciones para medir tiempo de ejecucion
 

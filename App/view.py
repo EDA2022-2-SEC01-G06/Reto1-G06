@@ -67,12 +67,16 @@ def printMenu():
 
     #requerimiento 5---->opcion 6
     print("6- Listar contenido producido en un pais")
+
     print("7- Encontrar contenido con un director involucrado")
+    print("8- Listar top N de generos con mas contenido")
     print("9- Cambiar el algoritmo para ordenamiento de los datos")
     print("10- Elegir TAD para el catalogo de peliculas")
     print("11- Elegir tamaño del catalogo de peliculas")
     #print("3- ")
     print("0- salir")
+
+#funciones de los requerimientos
 
 def loadData(control, controller_characteristics:dict):
     """
@@ -148,6 +152,12 @@ def videos_by_director(control, director:str, characteristics:dict):
     else:
         print(f"No se ha encontrado contenido dirigido por {director}")
 
+def Get_N_top(control, ntop, characteristics:dict):
+    sample_data=controller.Gender_ranking(control["model"], ntop, characteristics)
+    print("==================Requerimiento 7==============")
+    print(f"Hay un total de {len(sample_data)} tags registradas")
+    print(f"Los top {ntop} generos listados son: \n")
+    print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", stralign="right"))
 
 def ChangeTAD_type(list_name:str):
     """
@@ -310,6 +320,14 @@ while True:
         start_time=controller.Get_time()
         director=input("Director a buscar: ")
         videos_by_director(control, director, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
+    
+    elif int(inputs[0]) == 8:
+        start_time=controller.Get_time()
+        Ntop=int(input("N top: "))
+        Get_N_top(control, Ntop, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
