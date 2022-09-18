@@ -57,9 +57,9 @@ def NewCatalog(TADs:dict):
          "stream_services": None,
          "movies_by_year":None,
          "tv_shows_by_date":None,
-         "videos_by_country":None
+         "videos_by_country":None,
+         "director":None
          #"actores":None,
-         #"directores":None,
          
             }
 
@@ -224,6 +224,42 @@ def Search_videos_by_Country(catalog, country:str):
             videos_by_streaming_service[video["type"]]+=1
     #se retorna el diccionario con el conteo por streaming service
     return {"type":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
+
+def Search_videos_by_Director(catalog, director:str):
+    New_list_to_catalog(catalog, "director", "ARRAY_LIST")
+    #recorrer la lista de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    videos_by_streaming_service={}
+    videos_by_type={}
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+        #verificar si cumple los requisitos
+        if (video["director"].strip()==director):
+            #contruir el registro que se va a agregar
+            video2={
+                
+                "title":video["title"],
+                "release_year":video["release_year"],
+                "director": video["director"],
+                "stream_service": video["stream_service"],
+                "type":video["type"],
+                "duration":video["duration"],
+                "cast":video["cast"],
+                "country":video["country"],
+                "rating":video["rating"],
+                "listed_in":video["listed_in"],
+                "description":video["description"]
+              }
+            #se agrega el video a la lista
+            lt.addLast(catalog["director"], video2)
+            #agregar al conteo por streaming service
+            videos_by_streaming_service[video["stream_service"]]= videos_by_streaming_service.get(video["stream_service"], 0)
+            videos_by_streaming_service[video["stream_service"]]+=1
+            #agregar conteo por tipo
+            videos_by_type[video["type"]]= videos_by_type.get(video["type"], 0)
+            videos_by_type[video["type"]]+=1
+    #se retorna el diccionario con el conteo por streaming service
+    return {"type":videos_by_type.keys(), "count":videos_by_type.values()}, {"stream_service":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
 
 
 

@@ -67,7 +67,7 @@ def printMenu():
 
     #requerimiento 5---->opcion 6
     print("6- Listar contenido producido en un pais")
-
+    print("7- Encontrar contenido con un director involucrado")
     print("9- Cambiar el algoritmo para ordenamiento de los datos")
     print("10- Elegir TAD para el catalogo de peliculas")
     print("11- Elegir tamaño del catalogo de peliculas")
@@ -133,6 +133,20 @@ def videos_by_country(control, country:str, characteristics:dict):
         print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
     else:
         print(f"No se ha encontrado contenido producido en {country}")
+
+def videos_by_director(control, director:str, characteristics:dict):
+    sample_data, size_list, type_count ,st_s_count=controller.Videos_by_Director(control["model"], director,characteristics)
+    #print(sample_data)
+    print("==================Requerimiento 6==============")
+    print(f"------------Conteo de producciones hechas en {director}----------")
+    if size_list>0:
+        print(f"Hay {size_list} producciones dirigidas por {director}")
+        print(tabulate.tabulate(type_count,headers="keys",  tablefmt="grid"))
+        print(tabulate.tabulate(st_s_count,headers="keys",  tablefmt="grid"))
+        print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
+    else:
+        print(f"No se ha encontrado contenido dirigido por {director}")
 
 
 def ChangeTAD_type(list_name:str):
@@ -288,6 +302,14 @@ while True:
         start_time=controller.Get_time()
         country=input("Pais (en ingles): ")
         videos_by_country(control, country, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
+    
+    elif int(inputs[0]) == 7:
+        start_time=controller.Get_time()
+        director=input("Director a buscar: ")
+        videos_by_director(control, director, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
