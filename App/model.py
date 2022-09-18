@@ -56,10 +56,10 @@ def NewCatalog(TADs:dict):
          "videos":None,
          "stream_services": None,
          "movies_by_year":None,
-         "tv_shows_by_date":None
+         "tv_shows_by_date":None,
+         "videos_by_country":None
          #"actores":None,
          #"directores":None,
-         #"paises":None,
          
             }
 
@@ -132,13 +132,22 @@ def Get_sample_data(catalog, sample_size:int, list_name:str):
     last_samples=[]
     lista=catalog[list_name]
     list_size=Getlistsize(catalog, list_name)
-    for i in range(1, sample_size+1):
-        first_samples.append(lt.getElement(lista, i))
-    for e in range(list_size, list_size-sample_size, -1):
-        last_samples.append(lt.getElement(lista, e))
+    if list_size>=(sample_size*2):
+        for i in range(1, sample_size+1):
+            first_samples.append(lt.getElement(lista, i))
+        for e in range(list_size, list_size-sample_size, -1):
+            last_samples.append(lt.getElement(lista, e))
+    else:
+        for i in range(1, list_size+1):
+            first_samples.append(lt.getElement(lista, i))
+
     return first_samples+ list(reversed(last_samples))
 
 def Search_movie_by_year(catalog, year1:int, year2:int):
+    """
+    Se filtran los registros dentro del catalogo y se agregan a una lista los que se encuentren
+    entre el rango de años
+    """
     New_list_to_catalog(catalog, "movies_by_year", "ARRAY_LIST")
     #recorrer la lista de peliculas
     size_lista_peliculas=lt.size(catalog["videos"])
@@ -188,6 +197,33 @@ def Search_TV_show_by_date(catalog, date1:str, date2:str):
                 "cast":tv_show["cast"]
               }
                 lt.addLast(catalog["tv_shows_by_date"], show2)
+
+def Search_videos_by_Country(catalog, country:str):
+    New_list_to_catalog(catalog, "videos_by_country", "ARRAY_LIST")
+    #recorrer la lista de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    videos_by_streaming_service={}
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+        #verificar si cumple los requisitos
+        if (video["country"]==country):
+            #contruir el registro que se va a agregar
+            video2={
+                "type":video["type"],
+                "release_year":video["release_year"],
+                "title":video["title"],
+                "duration":video["duration"],
+                "stream_service": video["stream_service"],
+                "director": video["director"],
+                "cast":video["cast"]
+              }
+            #se agrega el video a la lista
+            lt.addLast(catalog["videos_by_country"], video2)
+            #agregar al conteo por streaming service
+            videos_by_streaming_service[video["type"]]= videos_by_streaming_service.get(video["type"], 0)
+            videos_by_streaming_service[video["type"]]+=1
+    #se retorna el diccionario con el conteo por streaming service
+    return {"type":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
 
 
 

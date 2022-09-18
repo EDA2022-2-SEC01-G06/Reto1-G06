@@ -131,6 +131,19 @@ def TV_show_by_date_added(catalog, date1:str, date2:str, characteristics:dict):
     else:
         return None, list_size
 
+def Videos_by_country(catalog, country:str, characteristics:dict):
+    """
+    Se ejecuta la funcion Videos by country en el modelo
+    """
+    streaming_service_count=model.Search_videos_by_Country(catalog, country)
+    list_size=model.Getlistsize(catalog, "videos_by_country")
+    if list_size > 0:
+        model.sortVideos(catalog, characteristics["sort_algoritm"], "videos_by_country")
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="videos_by_country"), list_size, streaming_service_count
+    else:
+        return (None, list_size, None)
+
+
 #funciones de medicion de tiempo
 
 def Get_time():
