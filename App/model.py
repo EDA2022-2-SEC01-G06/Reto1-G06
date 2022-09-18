@@ -33,6 +33,7 @@ from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import selectionsort as selection
 from DISClib.Algorithms.Sorting import mergesort as merge
 from DISClib.Algorithms.Sorting import quicksort as quick
+from datetime import datetime
 import time
 assert cf
 
@@ -54,8 +55,8 @@ def NewCatalog(TADs:dict):
     catalog ={
          "videos":None,
          "stream_services": None,
-         "movies_by_year":None
-         #"categorias":None,
+         "movies_by_year":None,
+         "tv_shows_by_date":None
          #"actores":None,
          #"directores":None,
          #"paises":None,
@@ -156,6 +157,38 @@ def Search_movie_by_year(catalog, year1:int, year2:int):
                 "cast":video["cast"]
               }
             lt.addLast(catalog["movies_by_year"], video2)
+
+def Search_TV_show_by_date(catalog, date1:str, date2:str):
+    """
+    Se recorre todo el catalogo de peliculas y se obtienen (y agregan a la lista tv_shows_by_date)
+    los tv shows que se agregaron en las fechas especificadas.
+    """
+    #se crea la lista
+    New_list_to_catalog(catalog, "tv_shows_by_date", "ARRAY_LIST")
+    #se transforman los parametros a datetime
+    initial_date=datetime.strptime(date1, "%B %d, %Y")
+    final_date=datetime.strptime(date2, "%B %d, %Y")
+
+    #se recorre el catalogo de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    for position in range(1,size_lista_peliculas+1):
+        tv_show=lt.getElement(catalog["videos"], position)
+        if tv_show["date_added"] != "":
+            tv_show_date=datetime.strptime(tv_show["date_added"], "%Y-%m-%d")
+            #verificar si cumple los requisitos
+            if (tv_show["type"]=="TV Show")and(initial_date<=tv_show_date<=final_date):
+                show2={
+                "type":tv_show["type"],
+                "date_added": tv_show["date_added"],
+                "title":tv_show["title"],
+                "duration":tv_show["duration"],
+                "release_year":tv_show["release_year"],
+                "stream_service": tv_show["stream_service"],
+                "director": tv_show["director"],
+                "cast":tv_show["cast"]
+              }
+                lt.addLast(catalog["tv_shows_by_date"], show2)
+
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista

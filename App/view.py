@@ -58,6 +58,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Listar peliculas estrenadas en un periodo")
+    print("3- Listar shows de tv añadidos en un periodo")
     print("9- Cambiar el algoritmo para ordenamiento de los datos")
     print("10- Elegir TAD para el catalogo de peliculas")
     print("11- Elegir tamaño del catalogo de peliculas")
@@ -98,6 +99,15 @@ def Movies_by_year(control, year1,year2, characteristics:dict):
     #print(sample_data)
     print("==================Requerimiento 1==============")
     print(f"Hay un total de {size_list} peliculas estrenadas entre {year1} y {year2}")
+    if size_list>0:
+        print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
+
+def Tv_shows_by_date(control, date1,date2, characteristics:dict):
+    sample_data, size_list=controller.TV_show_by_date_added(control["model"], date1, date2,characteristics)
+    #print(sample_data)
+    print("==================Requerimiento 2==============")
+    print(f"Hay un total de {size_list} Shows de tv estrenados entre {date1} y {date2}")
     if size_list>0:
         print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
         print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
@@ -238,6 +248,16 @@ while True:
         year1=int(input("Año inicial: "))
         year2=int(input("Año final: "))
         Movies_by_year(control, year1, year2, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
+    
+    elif int(inputs[0]) == 3:
+        start_time=controller.Get_time()
+        print("Introduce 2 fechas en formato %B %d, %Y (ej: January 07, 2018)")
+        date1=input("fecha inicial: ")
+        date2=input("fecha final: ")
+        Tv_shows_by_date(control, date1, date2, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()

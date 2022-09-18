@@ -108,11 +108,26 @@ def Get_Sample_Data(catalog, sample_size:int):
     return model.Get_sample_data(catalog, sample_size, "videos")
 
 def Movies_by_year(catalog, year1:int, year2:int, characteristics:dict):
+    """
+    Se ejecuta la funcion Movies by year en el modelo
+    """
     model.Search_movie_by_year(catalog,year1,year2)
     list_size=model.Getlistsize(catalog, "movies_by_year")
     if list_size > 0:
         model.sortVideos(catalog, characteristics["sort_algoritm"], "movies_by_year")
         return model.Get_sample_data(catalog, sample_size= 3,list_name="movies_by_year"), list_size
+    else:
+        return None, list_size
+
+def TV_show_by_date_added(catalog, date1:str, date2:str, characteristics:dict):
+    """
+    Se ejecuta la funcion TV show by date en el modelo
+    """
+    model.Search_TV_show_by_date(catalog,date1,date2)
+    list_size=model.Getlistsize(catalog, "tv_shows_by_date")
+    if list_size > 0:
+        model.sortVideos(catalog, characteristics["sort_algoritm"], "tv_shows_by_date")
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="tv_shows_by_date"), list_size
     else:
         return None, list_size
 
