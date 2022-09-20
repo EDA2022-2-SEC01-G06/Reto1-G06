@@ -206,14 +206,14 @@ def Change_Data_size():
     """
     print("Al realizar esta acción se necesitara volver a cargar el catalogo de videos")
     print("Seleccione el tamaño de los datos a cargar:")
-    print("1- small")
-    print("2- large")
-    print("3- 5pct")
-    print("4- 10pct")
-    print("5- 20pct")
-    print("6- 30pct")
-    print("7- 50pct")
-    print("8- 80pct")
+    print("1- small(0.05%)")
+    print("2- large(100%)")
+    print("3- 5pct(5%)")
+    print("4- 10pct(10%)")
+    print("5- 20pct(20%)")
+    print("6- 30pct(30%)")
+    print("7- 50pct(50%)")
+    print("8- 80pct(80%)")
     
     user_inputs = input('Seleccione una opción para continuar\n')
 
