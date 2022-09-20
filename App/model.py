@@ -57,6 +57,7 @@ def NewCatalog(TADs:dict):
          "stream_services": None,
          "movies_by_year":None,
          "tv_shows_by_date":None,
+         "videos_by_actor":None,
          "videos_by_country":None,
          "director":None,
          "genres_ranking":None
@@ -236,6 +237,37 @@ def Search_videos_by_Country(catalog, country:str):
             videos_by_streaming_service[video["type"]]= videos_by_streaming_service.get(video["type"], 0)
             videos_by_streaming_service[video["type"]]+=1
     #se retorna el diccionario con el conteo por streaming service
+    return {"type":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
+
+def Search_videos_by_actor(catalog,actor:str):
+    New_list_to_catalog(catalog,"videos_by_actor", "ARRAY_LIST", compare_videos)
+    #recorrer lista de peliculas
+    size_lista_peliculas=lt.size(catalog["videos"])
+    videos_by_streaming_service = {}
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+        #verificar si cumple
+        actores=video["cast"]
+        separados=actores.split(", ")
+        if actor in separados:
+            #construir el registro que se va a agregar
+            video2={
+                "title":video["title"],
+                "release_year":video["release_year"],
+                "director": video["director"],
+                "stream_service": video["stream_service"],
+                "duration":video["duration"],
+                "cast":video["cast"],
+                "country":video["country"],
+                "genre":video["listed_in"],
+                "description":video["description"]
+            }
+            #se agrega el video a la lista
+            lt.addLast(catalog["videos_by_actor"], video2)
+            #agregar al conteo por streaming service
+            videos_by_streaming_service[video["type"]] = videos_by_streaming_service.get(video["type"], 0)
+            videos_by_streaming_service[video["type"]]+=1
+    #se retorna el diccionario con el conteo por genero
     return {"type":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
 
 def Search_videos_by_Director(catalog, director:str):

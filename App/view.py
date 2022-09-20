@@ -62,7 +62,7 @@ def printMenu():
     print("3- Listar shows de tv añadidos en un periodo")
     #requerimientos individuales 3, 4 y 5
     #requerimiento 3 --->opcion 4
-
+    print("4- Listar por un actor en el elenco")
     #requerimiento 4---->opcion 5
     print("5- Listar por un genero en especifico")
     #requerimiento 5---->opcion 6
@@ -137,6 +137,19 @@ def videos_by_country(control, country:str, characteristics:dict):
         print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
     else:
         print(f"No se ha encontrado contenido producido en {country}")
+
+def videos_by_actor(control, actor:str, characteristics:dict):
+    sample_data, size_list, st_s_count=controller.Videos_by_actor(control["model"], actor,characteristics)
+    #print(sample_data)
+    print("==================Requerimiento 3==============")
+    print(f"------------Contenido con {actor} en el 'cast'----------")
+    if size_list>0:
+        print(f"Hay {size_list} producciones en las que '{actor}' está en el cast")
+        print(tabulate.tabulate(st_s_count,headers="keys",  tablefmt="grid"))
+        print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
+    else:
+        print(f"No se ha encontrado contenido con {actor} en el cast")
 
 def videos_by_director(control, director:str, characteristics:dict):
     sample_data, size_list, type_count ,st_s_count=controller.Videos_by_Director(control["model"], director,characteristics)
@@ -307,7 +320,14 @@ while True:
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
-    
+    elif int(inputs[0]) == 4:
+        start_time=controller.Get_time()
+        actor=input("Nombre del actor: ")
+        videos_by_actor(control, actor, controller_characteristics)
+        end_time=controller.Get_time()
+        print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
+        show_configuration()
+
     elif int(inputs[0]) == 5:
         start_time=controller.Get_time()
         gender= input("Introduce el genero: ")
@@ -317,7 +337,7 @@ while True:
         print(tabulate.tabulate(Content[0], headers="keys", tablefmt="grid", stralign="right", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
         show_configuration()
 
-    
+
     elif int(inputs[0]) == 6:
         start_time=controller.Get_time()
         country=input("Pais (en ingles): ")
