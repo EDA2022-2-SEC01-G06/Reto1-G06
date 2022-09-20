@@ -144,11 +144,18 @@ def Videos_by_country(catalog, country:str, characteristics:dict):
     else:
         return (None, list_size, None)
     
-def Content_by_gender(catalog,gender:str):
+def Content_by_gender(catalog,gender:str,characteristics:dict):
     """
     Se ejecuta la funcion contentgender en el modelo
     """
-    contentg=model.Contentgender(catalog,gender:str)
+
+    contentg=model.Contentgender(catalog,gender)
+    list_size=model.Getlistsize(catalog, "generos")
+    if list_size > 0:
+        model.sortlist(catalog, characteristics["sort_algoritm"], "generos", model.cmpMoviesByReleaseYear)
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="generos"), list_size, contentg
+    else:
+        return (None, list_size, None)
 
 
 

@@ -64,7 +64,7 @@ def printMenu():
     #requerimiento 3 --->opcion 4
 
     #requerimiento 4---->opcion 5
-
+    print("5- Listar por un genero en especifico")
     #requerimiento 5---->opcion 6
     print("6- Listar contenido producido en un pais")
 
@@ -307,6 +307,16 @@ while True:
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
+    
+    elif int(inputs[0]) == 5:
+        start_time=controller.Get_time()
+        gender= input("Introduce el genero: ")
+        Content= controller.Content_by_gender(control["model"],gender,controller_characteristics)
+        end_time=controller.Get_time()
+        print('el contenido en este genro es: ')
+        print(tabulate.tabulate(Content[0], headers="keys", tablefmt="grid", stralign="right", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        show_configuration()
+
     
     elif int(inputs[0]) == 6:
         start_time=controller.Get_time()

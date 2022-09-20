@@ -334,6 +334,30 @@ def Get_Genres_count_and_specs(catalog):
         rankin_element["stream_service"]=Dict_to_str(rankin_element["stream_service"])
         lt.addLast(catalog["genres_ranking"], rankin_element)
 
+def Contentgender(catalog,gender:str):
+
+    New_list_to_catalog(catalog, "generos", "SINGLE_LINKED", compare_videos)
+    size_lista_peliculas=lt.size(catalog["videos"])
+    for position in range(1,size_lista_peliculas+1):
+        video=lt.getElement(catalog["videos"], position)
+        if gender.lower() in video["listed_in"].lower():
+            video2={
+                
+                "title":video["title"],
+                "release_year":video["release_year"],
+                "director": video["director"],
+                "stream_service": video["stream_service"],
+                "duration":video["duration"],
+                "cast":video["cast"],
+                "country":video["country"],
+                "rating":video["rating"],
+                "listed_in":video["listed_in"],
+                "description":video["description"]
+              }
+            lt.addLast(catalog["generos"],video2)
+    
+   
+
 def Dict_to_str(dictionary:dict):
     llaves=list(dictionary.keys())
     valores=list(dictionary.values())
