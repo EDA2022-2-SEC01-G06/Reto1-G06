@@ -143,7 +143,19 @@ def Videos_by_country(catalog, country:str, characteristics:dict):
         return model.Get_sample_data(catalog, sample_size= 3,list_name="videos_by_country"), list_size, streaming_service_count
     else:
         return (None, list_size, None)
-    
+
+def Videos_by_actor(catalog, actor:str, characteristics:dict):
+    """
+    Se ejecuta la funcion Videos by actor en el modelo
+    """
+    streaming_service_count=model.Search_videos_by_Country(catalog, actor)
+    list_size=model.Getlistsize(catalog, "videos_by_actor")
+    if list_size > 0:
+        model.sortlist(catalog, characteristics["sort_algoritm"], "videos_by_actor", model.cmpMoviesByReleaseYear)
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="videos_by_actor"), list_size, streaming_service_count
+    else:
+        return (None, list_size, None)
+        
 def Content_by_gender(catalog,gender:str,characteristics:dict):
     """
     Se ejecuta la funcion contentgender en el modelo
