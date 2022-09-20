@@ -62,7 +62,7 @@ def printMenu():
     print("3- Listar shows de tv añadidos en un periodo")
     #requerimientos individuales 3, 4 y 5
     #requerimiento 3 --->opcion 4
-
+    print("4- Listar por un actor en el elenco")
     #requerimiento 4---->opcion 5
     print("5- Listar por un genero en especifico")
     #requerimiento 5---->opcion 6
