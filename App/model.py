@@ -57,6 +57,7 @@ def NewCatalog(TADs:dict):
          "stream_services": None,
          "movies_by_year":None,
          "tv_shows_by_date":None,
+         "videos_by_actor":None,
          "videos_by_country":None,
          "director":None,
          "genres_ranking":None
