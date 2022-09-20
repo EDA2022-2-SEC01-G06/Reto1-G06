@@ -23,6 +23,7 @@
 import config as cf
 import model
 import csv
+from DISClib.ADT import list as lt
 
 
 """
@@ -142,6 +143,16 @@ def Videos_by_country(catalog, country:str, characteristics:dict):
         return model.Get_sample_data(catalog, sample_size= 3,list_name="videos_by_country"), list_size, streaming_service_count
     else:
         return (None, list_size, None)
+    
+def Content_by_gender(catalog,gender:str):
+    """
+    Se ejecuta la funcion contentgender en el modelo
+    """
+    contentg=model.Contentgender(catalog,gender:str)
+
+
+
+
 
 def Videos_by_Director(catalog, director:str, characteristics:dict):
     """
