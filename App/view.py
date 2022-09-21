@@ -332,10 +332,11 @@ while True:
     elif int(inputs[0]) == 5:
         start_time=controller.Get_time()
         gender= input("Introduce el genero: ")
-        Content= controller.Content_by_gender(control["model"],gender,controller_characteristics)
+        Content, list_size= controller.Content_by_gender(control["model"],gender,controller_characteristics)
         end_time=controller.Get_time()
         print('el contenido en este genro es: ')
-        print(tabulate.tabulate(Content[0], headers="keys", tablefmt="grid", stralign="right", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
+        if list_size>0:
+            print(tabulate.tabulate(Content[0], headers="keys", tablefmt="grid", stralign="right", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
 
