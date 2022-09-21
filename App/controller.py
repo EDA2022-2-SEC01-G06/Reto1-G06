@@ -165,9 +165,9 @@ def Content_by_gender(catalog,gender:str,characteristics:dict):
     list_size=model.Getlistsize(catalog, "generos")
     if list_size > 0:
         model.sortlist(catalog, characteristics["sort_algoritm"], "generos", model.cmpMoviesByReleaseYear)
-        return model.Get_sample_data(catalog, sample_size= 3,list_name="generos"), list_size, contentg
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="generos"), list_size
     else:
-        return (None, list_size, None)
+        return (None, list_size)
 
 
 
