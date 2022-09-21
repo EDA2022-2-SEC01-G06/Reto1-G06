@@ -276,10 +276,12 @@ def Search_videos_by_Director(catalog, director:str):
     size_lista_peliculas=lt.size(catalog["videos"])
     videos_by_streaming_service={}
     videos_by_type={}
+    videos_by_genre={}
     for position in range(1,size_lista_peliculas+1):
         video=lt.getElement(catalog["videos"], position)
         #verificar si cumple los requisitos
         if (video["director"].strip()==director):
+            genres=video["listed_in"].split(",")
             #contruir el registro que se va a agregar
             video2={
                 
@@ -297,6 +299,10 @@ def Search_videos_by_Director(catalog, director:str):
               }
             #se agrega el video a la lista
             lt.addLast(catalog["director"], video2)
+            #agregar al conteo de genros
+            for genero in genres:
+                videos_by_genre[genero]=videos_by_genre.get(genero, 0)
+                videos_by_genre[genero]+=1
             #agregar al conteo por streaming service
             videos_by_streaming_service[video["stream_service"]]= videos_by_streaming_service.get(video["stream_service"], 0)
             videos_by_streaming_service[video["stream_service"]]+=1
@@ -304,7 +310,7 @@ def Search_videos_by_Director(catalog, director:str):
             videos_by_type[video["type"]]= videos_by_type.get(video["type"], 0)
             videos_by_type[video["type"]]+=1
     #se retorna el diccionario con el conteo por streaming service
-    return {"type":videos_by_type.keys(), "count":videos_by_type.values()}, {"stream_service":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()}
+    return {"type":videos_by_type.keys(), "count":videos_by_type.values()}, {"stream_service":videos_by_streaming_service.keys(), "count":videos_by_streaming_service.values()},{"listed_in":videos_by_genre.keys(), "count":videos_by_genre.values()} 
 
 def Get_Genres_count_and_specs(catalog):
     """

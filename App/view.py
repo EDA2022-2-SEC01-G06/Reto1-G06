@@ -152,7 +152,7 @@ def videos_by_actor(control, actor:str, characteristics:dict):
         print(f"No se ha encontrado contenido con {actor} en el cast")
 
 def videos_by_director(control, director:str, characteristics:dict):
-    sample_data, size_list, type_count ,st_s_count=controller.Videos_by_Director(control["model"], director,characteristics)
+    sample_data, size_list, type_count ,st_s_count, gender_count=controller.Videos_by_Director(control["model"], director,characteristics)
     #print(sample_data)
     print("==================Requerimiento 6==============")
     print(f"------------Conteo de producciones hechas en {director}----------")
@@ -160,6 +160,7 @@ def videos_by_director(control, director:str, characteristics:dict):
         print(f"Hay {size_list} producciones dirigidas por {director}")
         print(tabulate.tabulate(type_count,headers="keys",  tablefmt="grid"))
         print(tabulate.tabulate(st_s_count,headers="keys",  tablefmt="grid"))
+        print(tabulate.tabulate(gender_count,headers="keys",  tablefmt="grid"))
         print(tabulate.tabulate(sample_data, headers="keys", tablefmt="grid", maxcolwidths=[10,10,20,10,30,20,20,20,20,20,20,20,20]))
         print("La tabla puede mostrarse de manera incorrecta dependiendo del tamaño del terminal")
     else:

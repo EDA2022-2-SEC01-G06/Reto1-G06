@@ -177,11 +177,11 @@ def Videos_by_Director(catalog, director:str, characteristics:dict):
     """
     Se ejecuta la funcion Videos by director en el modelo
     """
-    type_count, streaming_service_count=model.Search_videos_by_Director(catalog, director)
+    type_count, streaming_service_count, gender_count=model.Search_videos_by_Director(catalog, director)
     list_size=model.Getlistsize(catalog, "director")
     if list_size > 0:
         model.sortlist(catalog, characteristics["sort_algoritm"], "director", model.cmpMoviesByReleaseYear)
-        return model.Get_sample_data(catalog, sample_size= 3,list_name="director"), list_size,type_count, streaming_service_count
+        return model.Get_sample_data(catalog, sample_size= 3,list_name="director"), list_size,type_count, streaming_service_count, gender_count
     else:
         return (None, list_size, None, None)
 
