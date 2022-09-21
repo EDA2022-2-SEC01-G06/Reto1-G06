@@ -304,34 +304,38 @@ while True:
         #print(((control["model"]["videos"])))
 
     elif int(inputs[0]) == 2:
-        start_time=controller.Get_time()
+        
         year1=int(input("Año inicial: "))
         year2=int(input("Año final: "))
+        start_time=controller.Get_time()
         Movies_by_year(control, year1, year2, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
     
     elif int(inputs[0]) == 3:
-        start_time=controller.Get_time()
+        
         print("Introduce 2 fechas en el formato %B %d, %Y (ej: January 07, 2018)")
         date1=input("fecha inicial: ")
         date2=input("fecha final: ")
+        start_time=controller.Get_time()
         Tv_shows_by_date(control, date1, date2, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
     elif int(inputs[0]) == 4:
-        start_time=controller.Get_time()
+        
         actor=input("Nombre del actor: ")
+        start_time=controller.Get_time()
         videos_by_actor(control, actor, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
 
     elif int(inputs[0]) == 5:
-        start_time=controller.Get_time()
+        
         gender= input("Introduce el genero: ")
+        start_time=controller.Get_time()
         Content = controller.Content_by_gender(control["model"],gender,controller_characteristics)
         end_time=controller.Get_time()
         print('el contenido en este genro es: ')
@@ -342,24 +346,27 @@ while True:
 
 
     elif int(inputs[0]) == 6:
-        start_time=controller.Get_time()
+        
         country=input("Pais (en ingles): ")
+        start_time=controller.Get_time()
         videos_by_country(control, country, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
     
     elif int(inputs[0]) == 7:
-        start_time=controller.Get_time()
+       
         director=input("Director a buscar: ")
+        start_time=controller.Get_time()
         videos_by_director(control, director, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
         show_configuration()
     
     elif int(inputs[0]) == 8:
-        start_time=controller.Get_time()
+        
         Ntop=int(input("N top: "))
+        start_time=controller.Get_time()
         Get_N_top(control, Ntop, controller_characteristics)
         end_time=controller.Get_time()
         print(f"Tiempo de ejecución: {controller.Delta_time(start_time,end_time)} ms")
